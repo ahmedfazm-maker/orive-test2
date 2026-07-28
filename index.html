@@ -56,7 +56,20 @@ body{
   background-size:190px 250px;
   -webkit-mask-image:radial-gradient(115% 85% at 50% 30%,#000 25%,transparent 78%);
   mask-image:radial-gradient(115% 85% at 50% 30%,#000 25%,transparent 78%);
-  will-change:transform;
+  will-change:transform,background-position;
+  animation:archDrift 150s linear infinite, archBreathe 24s ease-in-out infinite;
+}
+@keyframes archDrift{to{background-position:190px -500px}}
+@keyframes archBreathe{0%,100%{opacity:.19}50%{opacity:.27}}
+
+.orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform}
+.orb.a{width:48vw;height:48vw;top:-10%;left:-12%;background:radial-gradient(circle,rgba(134,63,94,.42),transparent 68%);animation:orbA 54s ease-in-out infinite}
+.orb.b{width:40vw;height:40vw;bottom:-14%;right:-10%;background:radial-gradient(circle,rgba(186,130,159,.24),transparent 68%);animation:orbB 68s ease-in-out infinite}
+.orb.c{width:32vw;height:32vw;top:38%;left:52%;background:radial-gradient(circle,rgba(212,169,193,.14),transparent 70%);animation:orbC 82s ease-in-out infinite}
+@keyframes orbA{0%,100%{transform:translate(0,0)}50%{transform:translate(6vw,7vh)}}
+@keyframes orbB{0%,100%{transform:translate(0,0)}50%{transform:translate(-7vw,-6vh)}}
+@keyframes orbC{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vw,4vh) scale(1.14)}
 }
 
 /* ---------- CURSOR ---------- */
@@ -143,7 +156,15 @@ section{position:relative;z-index:2;padding:clamp(6rem,13vh,11rem) var(--gut)}
 /* ---------- HERO ---------- */
 #hero{min-height:100svh;display:grid;place-items:center;text-align:center;padding-top:11.5rem;padding-bottom:5.5rem;overflow:hidden}
 @media(max-width:900px){#hero{padding-top:13rem}}
-@media(max-width:600px){#hero{padding-top:12rem;padding-bottom:7rem}}
+@media(max-width:600px){
+  #hero{padding-top:12rem;padding-bottom:7rem}
+  .hero-arch{width:93vw;height:min(78vh,640px)}
+  .hero-inner{max-width:min(80vw,360px)}
+  .hero-eyebrow{letter-spacing:.32em;font-size:.55rem}
+  .hero-h1{letter-spacing:.2em;line-height:1.5}
+  .hero-sub{max-width:30ch;font-size:.9rem}
+  .hero-actions{gap:.8rem;flex-direction:column;align-items:stretch}
+}
 .hero-arch{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);
   width:min(78vw,620px);height:min(86vh,780px);
@@ -246,7 +267,27 @@ section{position:relative;z-index:2;padding:clamp(6rem,13vh,11rem) var(--gut)}
 .stage.lit li{color:rgba(237,228,229,.78)}
 .stage .note{margin-top:1.4rem;font-family:var(--script);font-size:1.05rem;color:var(--mauve);text-align:center;line-height:1.4;transition:color .6s}
 .stage.lit .note{color:var(--pink)}
-@media(max-width:860px){.route-svg{display:none}.stages{grid-template-columns:1fr 1fr;gap:3rem 1.2rem;margin-top:0}}
+.rail{display:none}
+@media(max-width:860px){
+  .route-svg{display:none}
+  .rail{
+    display:block;position:absolute;left:20px;top:6px;bottom:2.2rem;width:1px;
+    background:linear-gradient(180deg,rgba(134,63,94,.5),rgba(134,63,94,.5) 92%,transparent);
+  }
+  .rail-fill{
+    position:absolute;top:0;left:-1px;width:3px;height:0;border-radius:2px;
+    background:linear-gradient(180deg,var(--mauve),var(--pink));
+    box-shadow:0 0 12px rgba(212,169,193,.45);transition:height .18s linear;
+  }
+  .stages{grid-template-columns:1fr;gap:3rem;margin-top:0;padding-left:54px}
+  .stage{padding:0;position:relative;text-align:left}
+  .stage .dot{position:absolute;left:-39px;top:3px;margin:0}
+  .stage h4{text-align:left;margin-bottom:1rem}
+  .stage ul{text-align:left}
+  .stage li{padding:.3rem 0}
+  .stage .note{text-align:left;margin-top:1rem}
+  .stage .note br{display:none}
+}
 @media(max-width:520px){.stages{grid-template-columns:1fr}}
 
 /* ---------- MEMBERSHIP ---------- */
@@ -365,6 +406,7 @@ footer{position:relative;z-index:2;padding:4.5rem var(--gut) 2.5rem;border-top:1
 <body>
 
 <div class="grain"></div>
+<div class="orbs" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
 <div class="archfield" id="archfield"></div>
 <div class="cur"></div><div class="cur-dot"></div>
 
@@ -443,7 +485,7 @@ footer{position:relative;z-index:2;padding:4.5rem var(--gut) 2.5rem;border-top:1
   <div class="head rv">
     <span class="label">01 · What we offer</span>
     <h2 data-split>However you travel, we take it from here</h2>
-    <p>Anyone can make a booking. What we offer is anticipation — a companion who learns your taste once, then applies it to everything that follows. Doors that don't open to a booking platform. A table held after service has closed. A plan reshaped mid-journey without a single call from you. Every arrangement is made through people we know personally, to one standard, whether you're leaving Egypt, arriving in it, or moving somewhere else entirely.</p>
+    <p>Anyone can book a trip. We provide anticipation—learning your taste once and tailoring everything that follows. From exclusive access to mid-journey adjustments handled silently behind the scenes, every detail is managed through our personal global network to one standard.</p>
     <div class="served">
       <b>For individuals</b>
       <b>For corporates</b>
@@ -499,6 +541,8 @@ footer{position:relative;z-index:2;padding:4.5rem var(--gut) 2.5rem;border-top:1
       <path class="route-path" d="M150 60 C 300 8, 450 112, 600 60 S 900 8, 1050 60"/>
       <path class="route-draw" id="routeDraw" d="M150 60 C 300 8, 450 112, 600 60 S 900 8, 1050 60"/>
     </svg>
+
+    <div class="rail" aria-hidden="true"><span class="rail-fill" id="railFill"></span></div>
 
     <div class="stages">
       <div class="stage" data-stage="0">
@@ -871,19 +915,32 @@ footer{position:relative;z-index:2;padding:4.5rem var(--gut) 2.5rem;border-top:1
 
   /* ROUTE LINE */
   var draw = document.getElementById('routeDraw');
+  var rail = document.getElementById('railFill');
   var stages = document.querySelectorAll('.stage');
   var len = draw ? draw.getTotalLength() : 0;
   if (draw){ draw.style.strokeDasharray = len; draw.style.strokeDashoffset = len; }
 
   function drawRoute(){
     var sec = document.getElementById('journey');
-    if (!sec || !draw) return;
+    if (!sec) return;
+    var mobile = window.matchMedia('(max-width:860px)').matches;
     var r = sec.getBoundingClientRect(), vh = window.innerHeight;
-    var p = (vh * 0.85 - r.top) / (r.height * 0.7);
+    var p;
+
+    if (mobile){
+      // progress across the stage list itself, so the rail tracks what you're reading
+      var wrap = sec.querySelector('.stages').getBoundingClientRect();
+      p = (vh * 0.72 - wrap.top) / wrap.height;
+    } else {
+      p = (vh * 0.85 - r.top) / (r.height * 0.7);
+    }
     p = Math.max(0, Math.min(1, p));
-    draw.style.strokeDashoffset = len * (1 - p);
+
+    if (draw) draw.style.strokeDashoffset = len * (1 - p);
+    if (rail) rail.style.height = (p * 100) + '%';
+
     stages.forEach(function(s, i){
-      s.classList.toggle('lit', p > (i + 0.4) / stages.length);
+      s.classList.toggle('lit', p > (i + (mobile ? 0.15 : 0.4)) / stages.length);
     });
   }
 
